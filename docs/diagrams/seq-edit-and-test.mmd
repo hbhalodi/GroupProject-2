@@ -1,0 +1,44 @@
+---
+title: Scenario 1 — Fix a bug and run tests (confirm mode)
+---
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant CLI as CLI Interface
+    participant L as Agentic Loop
+    participant LLM as LLM (Ollama / Groq)
+    participant T as Tools / MCP Client
+    participant FS as Filesystem MCP Server
+    participant SH as Local Shell Tool
+
+    U->>CLI: "Fix the failing test in utils.py"
+    CLI->>L: submit task
+    L->>LLM: history + tool schemas
+    LLM-->>L: tool_call read_file(utils.py)
+    L->>CLI: show tool call (read-only, no prompt)
+    L->>T: read_file(utils.py)
+    T->>FS: MCP call read_file
+    FS-->>T: file contents
+    T-->>L: result
+    L->>LLM: history + file contents
+    LLM-->>L: tool_call edit_file(utils.py, diff)
+    L->>CLI: show tool call + diff
+    CLI->>U: "Allow edit_file? [y/n]"
+    U-->>CLI: y
+    CLI-->>L: approved
+    L->>T: edit_file(...)
+    T->>FS: MCP call edit_file
+    FS-->>T: success
+    T-->>L: result
+    L->>LLM: history + edit result
+    LLM-->>L: tool_call run_shell("pytest")
+    CLI->>U: "Allow run_shell: pytest? [y/n]"
+    U-->>CLI: y
+    L->>T: run_shell("pytest")
+    T->>SH: execute with timeout
+    SH-->>T: "5 passed"
+    T-->>L: result
+    L->>LLM: history + test output
+    LLM-->>L: final answer (streamed)
+    L->>CLI: stream tokens
+    CLI->>U: "Fixed off-by-one in utils.py, all tests pass."

@@ -1,0 +1,43 @@
+---
+title: Golu — Agent State Diagram (initial)
+---
+stateDiagram-v2
+    [*] --> Startup
+    Startup: Startup<br/>load config, pick provider,<br/>connect MCP servers, load tools
+    Startup --> Idle
+
+    Idle: Idle<br/>REPL waits for input
+    Idle --> SlashCommand: input starts with "/"
+    SlashCommand --> Idle: /model /mode /tools /clear
+    Idle --> Exit: /exit or Ctrl+D
+    Idle --> CallingLLM: user task added to history
+
+    CallingLLM: Calling LLM<br/>history + tool schemas sent,<br/>response streamed
+    CallingLLM --> ParsingResponse
+
+    ParsingResponse --> FinalAnswer: no tool calls
+    ParsingResponse --> ToolSelected: tool call(s) requested
+    ParsingResponse --> MaxIterations: iteration limit reached
+
+    ToolSelected: Tool selected<br/>name + args shown in CLI
+    ToolSelected --> AwaitingConfirm: confirm mode AND tool writes/executes
+    ToolSelected --> ExecutingTool: auto mode OR read-only tool
+
+    AwaitingConfirm --> ExecutingTool: user approves
+    AwaitingConfirm --> ToolDenied: user rejects
+
+    ToolDenied: Denied<br/>"user rejected" added as tool result
+    ToolDenied --> CallingLLM
+
+    ExecutingTool: Executing tool<br/>local tool or MCP call<br/>(filesystem / external / RAG)
+    ExecutingTool --> ObservingResult: success
+    ExecutingTool --> ObservingResult: error (error text returned)
+
+    ObservingResult: Observing result<br/>result shown (truncated),<br/>appended to history
+    ObservingResult --> ToolSelected: more tool calls in same turn
+    ObservingResult --> CallingLLM: all calls done
+
+    FinalAnswer --> Idle
+    MaxIterations: Stopped<br/>warn user, show progress
+    MaxIterations --> Idle
+    Exit --> [*]

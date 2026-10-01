@@ -1,0 +1,44 @@
+---
+title: Scenario 2 — Write code using library docs (auto mode)
+---
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant CLI as CLI Interface
+    participant L as Agentic Loop
+    participant LLM as LLM (Ollama / Groq)
+    participant T as Tools / MCP Client
+    participant RAG as Custom RAG MCP Server
+    participant VDB as Chroma Vector DB
+    participant EXT as External MCP Server (Context7)
+    participant FS as Filesystem MCP Server
+
+    U->>CLI: "Add a LangChain retriever to search.py"
+    CLI->>L: submit task (auto mode)
+    L->>LLM: history + tool schemas
+    LLM-->>L: tool_call search_docs("LangChain retriever")
+    L->>CLI: show tool call + spinner
+    L->>T: search_docs(query)
+    T->>RAG: MCP call search_docs
+    RAG->>VDB: vector search (top k)
+    RAG->>RAG: BM25 keyword search
+    RAG->>RAG: fuse scores + rerank
+    RAG-->>T: top chunks + sources
+    T-->>L: result
+    L->>LLM: history + retrieved chunks
+    LLM-->>L: tool_call get_library_docs("langchain", latest API)
+    L->>T: get_library_docs(...)
+    T->>EXT: MCP call
+    EXT-->>T: current API docs
+    T-->>L: result
+    L->>LLM: history + external docs
+    LLM-->>L: tool_call write_file(search.py, code)
+    L->>CLI: show tool call (auto mode, no prompt)
+    L->>T: write_file(...)
+    T->>FS: MCP call write_file
+    FS-->>T: success
+    T-->>L: result
+    L->>LLM: history + write result
+    LLM-->>L: final answer (streamed)
+    L->>CLI: stream tokens
+    CLI->>U: summary of changes + doc sources used
