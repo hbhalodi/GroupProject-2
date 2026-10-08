@@ -1,0 +1,31 @@
+{
+  "servers": {
+    "filesystem": {
+      "description": "Official MCP filesystem server. Read, write and edit files, limited to the project folder.",
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "${PROJECT_ROOT}"],
+      "confirm_tools": ["write_file", "edit_file", "create_directory", "move_file"]
+    },
+    "golu-docs": {
+      "description": "Our custom RAG server: search_docs over the local LangChain docs index (fusion retrieval).",
+      "transport": "stdio",
+      "command": "${PYTHON}",
+      "args": ["-m", "rag_server.server"],
+      "cwd": "${GOLU_HOME}"
+    },
+    "context7": {
+      "description": "External resource server: up-to-date docs for thousands of libraries. Works without a key (rate limited); a free key raises the limit.",
+      "transport": "http",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {"CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"}
+    },
+    "tavily": {
+      "description": "Optional external server: web search. Set TAVILY_API_KEY in .env and change enabled to true.",
+      "enabled": false,
+      "transport": "http",
+      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=${TAVILY_API_KEY}",
+      "requires_env": ["TAVILY_API_KEY"]
+    }
+  }
+}

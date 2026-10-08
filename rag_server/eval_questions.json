@@ -1,0 +1,22 @@
+[
+  {"question": "How do I define a custom tool with the @tool decorator?", "expected": ["tools.mdx"]},
+  {"question": "bind_tools on a chat model", "expected": ["models.mdx", "tools.mdx"]},
+  {"question": "What is a ToolMessage and what is tool_call_id used for?", "expected": ["messages.mdx"]},
+  {"question": "How do I stream tokens from an agent as they are generated?", "expected": ["streaming.mdx", "event-streaming.mdx"]},
+  {"question": "Get structured output from a model using a Pydantic schema", "expected": ["structured-output.mdx", "models.mdx"]},
+  {"question": "create_agent with a system prompt and tools", "expected": ["agents.mdx", "quickstart.mdx"]},
+  {"question": "Connect an agent to MCP servers and load their tools", "expected": ["mcp/"]},
+  {"question": "Pause the agent for human approval before a tool runs", "expected": ["human-in-the-loop.mdx"]},
+  {"question": "Write custom middleware that runs before the model call", "expected": ["middleware/custom.mdx", "middleware/overview.mdx"]},
+  {"question": "Built-in middleware for summarizing long conversation history", "expected": ["middleware/built-in.mdx", "short-term-memory.mdx"]},
+  {"question": "Persist conversation memory across turns with a checkpointer", "expected": ["short-term-memory.mdx"]},
+  {"question": "Store user preferences across threads (long-term memory store)", "expected": ["long-term-memory.mdx"]},
+  {"question": "Build a retrieval agent over a knowledge base with a vector store", "expected": ["retrieval.mdx", "knowledge-base.mdx"]},
+  {"question": "Unit testing an agent with a fake chat model", "expected": ["test/unit-testing.mdx", "test/"]},
+  {"question": "MODEL_RATE_LIMIT error, how to handle it", "expected": ["errors/MODEL_RATE_LIMIT.mdx"]},
+  {"question": "init_chat_model to switch providers", "expected": ["models.mdx"]},
+  {"question": "Multi-agent handoffs between agents", "expected": ["multi-agent/handoffs.mdx", "multi-agent/"]},
+  {"question": "Access runtime context inside a tool (ToolRuntime)", "expected": ["tools.mdx", "runtime.mdx"]},
+  {"question": "Add guardrails to block PII in agent output", "expected": ["guardrails.mdx"]},
+  {"question": "Install langchain and a provider package with pip", "expected": ["install.mdx"]}
+]

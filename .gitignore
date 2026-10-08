@@ -1,0 +1,23 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Golu runtime files (logs, prompt history)
+.golu/
+
+# RAG: downloaded docs and the vector DB are rebuilt locally
+rag_server/data/
+rag_server/chroma_db/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

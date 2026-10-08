@@ -1,0 +1,24 @@
+# Golu: Python 3.11+
+# Install: pip install -r requirements.txt
+
+# --- LLM providers (LangChain chat-model abstraction) ---
+langchain-core>=1.0
+langchain-ollama>=1.0          # local models + embeddings via Ollama
+langchain-groq>=1.0            # cloud provider (free tier)
+# Optional extra providers (uncomment if you have keys):
+# langchain-openai>=1.0
+# langchain-anthropic>=1.0
+
+# --- MCP (client in golu/, server in rag_server/) ---
+mcp>=2.0,<3.0
+
+# --- RAG server ---
+chromadb>=1.0
+
+# --- CLI ---
+rich>=13.0
+prompt-toolkit>=3.0
+python-dotenv>=1.0
+
+# --- Tests ---
+pytest>=8.0
